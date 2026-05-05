@@ -1,13 +1,17 @@
 <div align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=250&section=header&text=Paxon%20Huang&fontSize=80&animation=fadeIn&fontAlignY=35&desc=AIoT%20/%20Embedded%20System%20/%20Full-Stack&descAlignY=55&descAlign=50" alt="header">
 </div>
+
 <h1 align="center">Hi there, I'm Paxon 👋</h1>
+
 <p align="center">
   <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=500&size=22&pause=1000&color=3B82F6&center=true&vCenter=true&width=550&lines=Hardware+%26+Embedded+Systems+Engineer;AIoT+%26+Deep+Learning+Enthusiast;Full-Stack+Web+%26+App+Developer;FinTech+%26+Quant+Researcher" alt="Typing SVG" /></a>
   <br>
   <img src="https://komarev.com/ghpvc/?username=PaxonHuang&label=Profile%20views&color=0e75b6&style=flat" alt="PaxonHuang" />
 </p>
+
 ---
+
 ## 💫 About Me
 
 - 🔭 I’m currently building **AIoT applications & Advanced Embedded systems**
@@ -15,7 +19,9 @@
 - 💬 Ask me about **STM32, FreeRTOS, Edge AI, or Modern Web Frameworks**
 - 📫 How to reach me: **lapinextech@gmail.com**
 - ⚡ Fun fact: I navigate interchangeably between bare-metal C programming and modern frontend UI design.
+
 ---
+
 ## 🧠 Languages & Tools
 
 > **💡 Click to expand each section to see my specialized stack!**
@@ -99,7 +105,9 @@
   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" />
 </p>
 </details>
+
 ---
+
 ## 🏆 GitHub Stats & Trophies
 
 <p align="center">
@@ -112,7 +120,9 @@
   <img width="48%" src="https://github-readme-stats.vercel.app/api?username=PaxonHuang&show_icons=true&theme=dark&hide_border=true&bg_color=0d1117" alt="GitHub Stats" />
   <img width="48%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=PaxonHuang&layout=compact&theme=dark&hide_border=true&bg_color=0d1117" alt="Top Languages" />
 </p>
+
 ---
+
 ## 🐍 Contribution Snake
 
 <p align="center">
@@ -125,8 +135,11 @@
   <br>
   <i>Want your own snake? Check out the <a href="https://github.com/Platane/snk">Platane/snk</a> action.</i>
 </p>
+
 ---
+
 ## 🌍 Connect With Me
+
 <p align="center">
   <a href="https://github.com/PaxonHuang"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" /></a>
   <a href="mailto:lapinextech@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
