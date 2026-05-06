@@ -6,5 +6,8 @@ export default defineConfig({
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: true
+    }
   },
 });
