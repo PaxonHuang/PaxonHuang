@@ -1,6 +1,6 @@
 'use client';
 
-import { OPPORTUNITIES } from '../../src/data';
+import { OPPORTUNITIES } from '../../data';
 import { Zap, Server, Globe, Cpu } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

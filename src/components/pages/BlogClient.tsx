@@ -1,7 +1,6 @@
 'use client';
 
-import Link from 'next/link';
-import type { BlogPost } from '../../src/blog';
+import type { BlogPost } from '../../blog';
 import { Terminal, Search, Tag } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState, useMemo } from 'react';
@@ -84,7 +83,7 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
               </span>
             </div>
             
-            <Link href={`/blog/${post.slug}`} className="block bg-white dark:bg-dark-900 shadow-solid shadow-solid-hover rounded-xl p-6 mt-4">
+            <a href={`/blog/${post.slug}`} className="block bg-white dark:bg-dark-900 shadow-solid shadow-solid-hover rounded-xl p-6 mt-4">
               <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-gray-100 mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {post.title}
               </h2>
@@ -99,7 +98,7 @@ export default function BlogClient({ posts }: { posts: BlogPost[] }) {
                   </span>
                 ))}
               </div>
-            </Link>
+            </a>
           </article>
         ))}
         {filteredPosts.length === 0 && (

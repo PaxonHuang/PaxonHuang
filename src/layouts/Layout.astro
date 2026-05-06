@@ -1,0 +1,33 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import ReactLayout from '../components/Layout';
+import '../styles/globals.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const pathname = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description || "Astro description"} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" />
+    <ClientRouter />
+  </head>
+  <body>
+    <!-- ReactLayout renders client side with the specific pathname -->
+    <ReactLayout client:load pathname={pathname}>
+      <slot />
+    </ReactLayout>
+  </body>
+</html>

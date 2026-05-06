@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 -p 3000",
-    "build": "next build && rm -rf dist && mv out dist",
-    "lint": "next lint"
+    "dev": "astro dev --host 0.0.0.0 --port 3000",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0 --port 3000",
+    "lint": "astro check"
   },
   "dependencies": {
+    "@astrojs/react": "^4.0.0",
+    "@astrojs/tailwind": "^5.0.0",
     "@tailwindcss/vite": "^4.1.14",
+    "astro": "^5.0.0",
     "clsx": "^2.1.1",
     "express": "^4.21.2",
     "front-matter": "^4.0.2",
@@ -17,7 +21,6 @@
     "katex": "^0.16.45",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
-    "next": "^16.2.4",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "react-i18next": "^17.0.6",

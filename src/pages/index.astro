@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HomeClient from '../components/pages/HomeClient';
+import { getBlogPosts } from '../blog';
+
+const posts = getBlogPosts();
+const recentPosts = posts.slice(0, 3);
+---
+
+<Layout title="Lapinex Tech Blog" description="Personal highly technical blog covering AIoT, embedded systems, cybersecurity, AI, and full-stack development.">
+  <HomeClient client:load recentPosts={recentPosts} />
+</Layout>

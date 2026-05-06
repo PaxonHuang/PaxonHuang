@@ -1,6 +1,6 @@
 'use client';
 
-import { PROJECTS } from '../../src/data';
+import { PROJECTS } from '../../data';
 import { Briefcase, ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

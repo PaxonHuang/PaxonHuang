@@ -1,50 +1,14 @@
-import { getBlogPosts } from '../../../src/blog';
-import type { Metadata } from 'next';
+import React from 'react';
+import type { BlogPost as BlogPostType } from '../../blog';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import { Clock } from 'lucide-react';
-import { notFound } from 'next/navigation';
-import BackButton from '../../../src/components/BackButton';
+import BackButton from '../BackButton';
 
-export async function generateStaticParams() {
-  const posts = getBlogPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const posts = getBlogPosts();
-  const post = posts.find(p => p.slug === slug);
-  
-  if (!post) {
-    return { title: 'Post Not Found' };
-  }
-
-  return {
-    title: `${post.title} | Lapinex Tech Blog`,
-    description: post.excerpt,
-    keywords: post.tags,
-  };
-}
-
-export default async function BlogPostPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>
-}) {
-  const { slug } = await params;
-  const posts = getBlogPosts();
-  const post = posts.find(p => p.slug === slug);
-
-  if (!post) {
-    notFound();
-  }
-
+export default function BlogPost({ post }: { post: BlogPostType }) {
   // Generate table of contents
   const matches = Array.from(post.content.matchAll(/(?:^|\n)(#{1,3})\s+([^\n]+)/g));
   const toc = matches.map(match => {

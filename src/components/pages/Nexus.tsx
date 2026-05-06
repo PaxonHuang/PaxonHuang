@@ -1,6 +1,6 @@
 'use client';
 
-import { CLOUD_RESOURCES, TOOL_LINKS } from '../../src/data';
+import { CLOUD_RESOURCES, TOOL_LINKS } from '../../data';
 import { HardDrive, Download, Link as LinkIcon, ExternalLink, Network } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

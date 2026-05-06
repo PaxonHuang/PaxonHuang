@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { Terminal, BookOpen, HardDrive, Briefcase, Zap, Moon, Sun, Globe } from 'lucide-react';
 import clsx from 'clsx';
@@ -9,8 +7,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import '../i18n'; // Ensure i18n is initialized
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+export default function Layout({ children, pathname = '/' }: { children: React.ReactNode, pathname?: string }) {
   const [isDark, setIsDark] = useState(false);
   const { t, i18n } = useTranslation();
 
@@ -42,7 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex flex-col items-center">
       <header className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 mb-8 mt-4">
         <nav className="flex flex-col md:flex-row items-center justify-between gap-6 bg-white dark:bg-dark-900 shadow-solid rounded-2xl p-4">
-          <Link href="/" className="flex items-center gap-2 group">
+          <a href="/" className="flex items-center gap-2 group">
             <div className="bg-slate-900 dark:bg-primary-600 text-white p-2 rounded-lg group-hover:bg-primary-500 transition-colors shadow-sm">
               <Terminal size={24} />
             </div>
@@ -50,13 +47,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <h1 className="font-display font-bold text-xl tracking-tight text-slate-900 dark:text-white leading-none">Lapinex</h1>
               <span className="font-mono text-xs text-slate-500 dark:text-slate-400">Tech_Nexus</span>
             </div>
-          </Link>
+          </a>
           <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
             {navItems.map((item) => {
               const isActive = pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path));
               const Icon = item.icon;
               return (
-                <Link
+                <a
                   key={item.path}
                   href={item.path}
                   className={clsx(
@@ -73,7 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   )}
                   <Icon size={16} />
                   <span className="hidden sm:inline">{item.label}</span>
-                </Link>
+                </a>
               );
             })}
             <div className="flex items-center ml-2 border-l border-slate-200 dark:border-slate-700 pl-2">

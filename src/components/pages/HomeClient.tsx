@@ -1,8 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { OPPORTUNITIES } from '../src/data';
-import type { BlogPost } from '../src/blog';
+import { OPPORTUNITIES } from '../../data';
+import type { BlogPost } from '../../blog';
 import { ArrowRight, Cpu, Shield, BrainCircuit, Code2, Github, QrCode, Linkedin, MonitorPlay, Twitter, MessageCircle, Send, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,12 +22,12 @@ export default function HomeClient({ recentPosts }: { recentPosts: BlogPost[] })
           {t('home.intro')} <a href="https://github.com/PaxonHuang" target="_blank" rel="noopener noreferrer" className="font-semibold text-slate-900 dark:text-white hover:text-primary-600 flex items-center gap-1 inline-flex"><Github size={16} /> PaxonHuang</a>
         </p>
         <div className="flex flex-wrap gap-4 pt-4">
-          <Link href="/blog" className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center gap-2">
+          <a href="/blog" className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-medium hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center gap-2">
             {t('home.btn.blog')} <ArrowRight size={18} />
-          </Link>
-          <Link href="/projects" className="px-6 py-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+          </a>
+          <a href="/projects" className="px-6 py-3 bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-800 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
             {t('home.btn.projects')}
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -97,13 +96,13 @@ export default function HomeClient({ recentPosts }: { recentPosts: BlogPost[] })
       <section className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-display font-bold text-slate-900 dark:text-white">{t('home.section.recent')}</h2>
-          <Link href="/blog" className="text-primary-600 dark:text-primary-400 text-sm font-bold hover:underline flex items-center gap-1">
+          <a href="/blog" className="text-primary-600 dark:text-primary-400 text-sm font-bold hover:underline flex items-center gap-1">
             {t('home.viewall')} <ArrowRight size={16} />
-          </Link>
+          </a>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {recentPosts.map(post => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="group flex flex-col justify-between bg-white dark:bg-dark-900 shadow-solid shadow-solid-hover rounded-2xl p-6">
+            <a key={post.slug} href={`/blog/${post.slug}`} className="group flex flex-col justify-between bg-white dark:bg-dark-900 shadow-solid shadow-solid-hover rounded-2xl p-6">
               <div>
                 <div className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 mb-3 block">{post.date} &bull; {post.category}</div>
                 <h3 className="font-display font-bold text-lg text-slate-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
@@ -118,7 +117,7 @@ export default function HomeClient({ recentPosts }: { recentPosts: BlogPost[] })
                   </span>
                 ))}
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </section>

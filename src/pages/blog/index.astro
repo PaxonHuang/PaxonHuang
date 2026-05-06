@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogClient from '../../components/pages/BlogClient';
+import { getBlogPosts } from '../../blog';
+
+const posts = getBlogPosts();
+---
+
+<Layout title="Blog | Lapinex Tech" description="Insights, tutorials, and thoughts on AI, hardware, and web development.">
+  <BlogClient client:load posts={posts} />
+</Layout>
