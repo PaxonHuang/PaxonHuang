@@ -102,9 +102,45 @@ Every PR opened against `main` gets a unique preview URL automatically (e.g. `ht
 
 ## Troubleshooting
 
+### "The process 'npx' failed with exit code 1"
+
+This is the generic "something failed in npx" error. **Click into the failed run on the Actions tab to see the actual step that failed.** Most common causes:
+
+| # | Cause | How to verify | Fix |
+|---|-------|---------------|-----|
+| 1 | `CLOUDFLARE_API_TOKEN` not set or wrong | Open repo → Settings → Secrets → check both `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` exist | Regenerate the token with **Edit Cloudflare Pages** template, update the secret |
+| 2 | Token missing Pages:Edit permission | Go to <https://dash.cloudflare.com/profile/api-tokens> → click the token → **Permissions** | Edit the token, add `Account → Cloudflare Pages: Edit`, copy new value to secret |
+| 3 | Project `paxonhuang` not auto-created (rare) | Check the `Deploy to Cloudflare Pages` step log for "Project not found" | Manually create it: Dashboard → Workers & Pages → Create → Pages → Connect to Git → name it `paxonhuang` |
+| 4 | `Account ID` wrong | Compare `CLOUDFLARE_ACCOUNT_ID` to the one in Dashboard → Workers & Pages → right sidebar | Update the secret with the correct 32-char hex string |
+| 5 | `npm ci` failure | Check the "Install dependencies" step log | Run `npm install` locally to regenerate `package-lock.json`, commit the new lockfile |
+
+### "Node.js 20 is deprecated" warning
+
+GitHub deprecated Node 20 in late 2025 ([changelog](https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/)). The workflow now uses **Node 22 LTS** — clear the warning by pulling the latest workflow file:
+
+```bash
+git pull origin main
+```
+
+### Other common issues
+
 | Issue | Fix |
 |-------|-----|
-| Action fails with `Authentication error [code: 10000]` | Check `CLOUDFLARE_API_TOKEN` secret is valid and not expired |
-| Build fails: `Cannot find module @astrojs/react` | Run `npm ci` (not `npm install`) to use the locked dependency tree |
-| 404 on routes | Cloudflare Pages auto-handles SPA routing for static assets; no `_redirects` needed for this Astro build |
+| Action fails with `Authentication error [code: 10000]` | `CLOUDFLARE_API_TOKEN` is invalid or expired — regenerate it |
+| Build fails: `Cannot find module @astrojs/react` | `package-lock.json` is out of sync — run `npm install` locally and commit the updated lockfile |
+| 404 on routes | Cloudflare Pages auto-handles SPA routing; no `_redirects` needed for this Astro build |
+| KaTeX math not rendering | `rehype-katex` runs at build time — verify `astro.config.mjs` has the plugin listed |
 | `nodejs_compat` flag warning | Already enabled in `wrangler.jsonc` for Astro v5 SSR compatibility |
+
+### How to re-run a failed workflow
+
+1. Go to <https://github.com/PaxonHuang/PaxonHuang/actions>
+2. Click the failed run (red ✗)
+3. Click **Re-run jobs** → **Re-run failed jobs**
+
+Or, if you only need to retrigger, push an empty commit:
+
+```bash
+git commit --allow-empty -m "chore: retry deployment"
+git push
+```
