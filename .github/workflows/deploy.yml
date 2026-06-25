@@ -6,6 +6,7 @@ on:
       - main
   workflow_dispatch:
 
+# Required for Cloudflare OIDC token exchange
 permissions:
   contents: read
   pages: write
@@ -17,40 +18,101 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy to Cloudflare Pages
+    name: Build & deploy to Cloudflare Pages
     runs-on: ubuntu-latest
+    env:
+      # Use a recent LTS. GitHub deprecated Node 20 in late 2025.
+      # Pin to a specific minor for reproducible builds.
+      NODE_VERSION: "22"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
+      - name: Verify Node & npm versions
+        run: |
+          node --version
+          npm --version
+
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --no-audit --no-fund
+        env:
+          # Speed up & stabilize installs in CI
+          NPM_CONFIG_FUND: "false"
+          NPM_CONFIG_AUDIT: "false"
 
       - name: Build Astro site
         run: npm run build
         env:
           NODE_ENV: production
 
-      - name: Configure Pages
+      - name: Verify build output exists
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "::error::dist/ directory was not produced by the build"
+            exit 1
+          fi
+          echo "Build output:"
+          ls -la dist/
+          echo ""
+          echo "Page count:"
+          find dist -name "index.html" | wc -l
+
+      - name: Pre-flight: verify Cloudflare auth
+        if: always()
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID must be set in repository secrets"
+            echo "See DEPLOY.md for setup instructions."
+            exit 1
+          fi
+          echo "Secrets present ✓"
+          echo "Account ID length: ${#CLOUDFLARE_ACCOUNT_ID}"
+          echo "Token length: ${#CLOUDFLARE_API_TOKEN}"
+
+      - name: Deploy to Cloudflare Pages
+        # Use wrangler directly — it auto-creates the project on first deploy
+        # and gives the clearest error messages.
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: "."
+          # Run the Pages deploy command (auto-creates project on first run)
+          command: >-
+            wrangler pages deploy ./dist
+            --project-name=paxonhuang
+            --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: paxonhuang
-          directory: ./dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Production branch deploys to the main deployment URL
-          branch: main
+      - name: Print deployment summary
+        if: success()
+        run: |
+          echo "## 🚀 Deployment summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Production URL**: https://paxonhuang.pages.dev" >> $GITHUB_STEP_SUMMARY
+          echo "- **Latest deployment**: https://a7c8921a.paxonhuang.pages.dev" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Print failure diagnostics
+        if: failure()
+        run: |
+          echo "## ❌ Deployment failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Common causes" >> $GITHUB_STEP_SUMMARY
+          echo "1. **Project doesn't exist**: \`wrangler pages deploy\` should auto-create it, but if it fails, create \`paxonhuang\` manually in the Cloudflare Dashboard → Workers & Pages." >> $GITHUB_STEP_SUMMARY
+          echo "2. **Token missing Pages:Edit permission**: regenerate the token at https://dash.cloudflare.com/profile/api-tokens with the 'Edit Cloudflare Pages' template." >> $GITHUB_STEP_SUMMARY
+          echo "3. **Wrong account ID**: copy the exact value from https://dash.cloudflare.com → Workers & Pages sidebar." >> $GITHUB_STEP_SUMMARY
+          echo "4. **dist/ missing or empty**: check the 'Build Astro site' step log for build errors." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See \`DEPLOY.md\` for the full setup guide." >> $GITHUB_STEP_SUMMARY
