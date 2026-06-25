@@ -1,10 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import HomeClient from '../components/pages/HomeClient';
-import { getBlogPosts } from '../blog';
+import { getCollection } from 'astro:content';
+import type { BlogPost } from '../blog';
 
-const posts = getBlogPosts();
-const recentPosts = posts.slice(0, 3);
+const entries = await getCollection('blog');
+const recentPosts: BlogPost[] = entries
+  .map((entry) => ({
+    slug: entry.id.replace(/\.md$/, ''),
+    title: entry.data.title,
+    date: entry.data.date.toISOString().slice(0, 10),
+    category: entry.data.category,
+    tags: entry.data.tags,
+    excerpt: entry.data.excerpt,
+    content: entry.body ?? '',
+  }))
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+  .slice(0, 3);
 ---
 
 <Layout title="Lapinex Tech Blog" description="Personal highly technical blog covering AIoT, embedded systems, cybersecurity, AI, and full-stack development.">

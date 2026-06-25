@@ -1,19 +1,22 @@
 ---
+import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import BlogPost from '../../components/pages/BlogPost';
-import { getBlogPosts } from '../../blog';
+import BlogArticle from '../../components/BlogArticle.astro';
 
 export async function getStaticPaths() {
-  const posts = getBlogPosts();
+  const posts = await getCollection('blog');
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id.replace(/\.md$/, '') },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
+const { Content, headings } = await render(post);
 ---
 
-<Layout title={`${post.title} | Lapinex Tech`} description={post.excerpt}>
-  <BlogPost client:load post={post} />
+<Layout title={`${post.data.title} | Lapinex Tech`} description={post.data.excerpt}>
+  <BlogArticle post={post} headings={headings}>
+    <Content />
+  </BlogArticle>
 </Layout>
